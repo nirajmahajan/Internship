@@ -6,4 +6,7 @@
     <string name="hint_passwd">Password</string>
     <string name="hint_usern">Username</string>
     <string name="welcome">Welcome %s</string>
+    <string name="re_enter_the_password">Re enter the Password</string>
+    <string name="enter_the_name">Enter the Name</string>
+    <string name="delete_account">Delete Account</string>
 </resources>
