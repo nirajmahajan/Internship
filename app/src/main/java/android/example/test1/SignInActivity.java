@@ -25,8 +25,6 @@ public class SignInActivity extends AsyncTask <String, Void, String[]> {
         ctx = context;
     }
 
-    public String ip = "192.168.43.148";
-
     protected void onPreExecute(){
     }
 
@@ -55,6 +53,7 @@ public class SignInActivity extends AsyncTask <String, Void, String[]> {
             String username = args[0];
             String password = args[1];
             String mode = args[2];
+            String ip = args[3];
             String link = null;
 
             if (mode.equals("login")) {

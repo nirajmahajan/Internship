@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_delete"
-        android:title="@string/delete_account"
+        android:id="@+id/menu_ip_update"
+        android:title="Change IP"
         android:orderInCategory="300"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_signOut"
-        android:title="Log Out"
+        android:id="@+id/menu_home"
+        android:title="Home"
         android:orderInCategory="299"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

@@ -9,4 +9,6 @@
     <string name="re_enter_the_password">Re enter the Password</string>
     <string name="enter_the_name">Enter the Name</string>
     <string name="delete_account">Delete Account</string>
+    <string name="ip_override_username">IP_OVERRIDE</string>
+    <string name="ip_override_password">IP_OVERRIDE</string>
 </resources>
