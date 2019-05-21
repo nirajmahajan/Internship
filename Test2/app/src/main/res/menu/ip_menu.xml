@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_ip_update"
+        android:title="Change IP"
+        android:orderInCategory="300"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home"
+        android:orderInCategory="298"
+        android:icon="@drawable/home_white"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_ip_reset"
+        android:title="Reset IP"
+        android:orderInCategory="299"
+        app:showAsAction="ifRoom" />
+</menu>
