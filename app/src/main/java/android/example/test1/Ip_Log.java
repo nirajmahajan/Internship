@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.example.test1.Utilities.App;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -58,7 +59,6 @@ public class Ip_Log extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             String newIP = et_getIP.getText().toString();
                             app.setIp(newIP);
-                            Toast.makeText(getApplicationContext(), "IP changed succesfully to "+newIP, Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     })
@@ -70,6 +70,13 @@ public class Ip_Log extends AppCompatActivity {
                     .show();
         }
         else if (id == R.id.menu_home){
+            Intent home = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(home);
+            finish();
+        }
+        else if (id == R.id.menu_ip_reset) {
+            app.setIp(app.getIpLog().get(0));
+            Toast.makeText(getApplicationContext(), "IP Reset to Default Value", Toast.LENGTH_SHORT).show();
             Intent home = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(home);
             finish();

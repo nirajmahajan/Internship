@@ -1,6 +1,7 @@
-package android.example.test1;
+package android.example.test1.Utilities;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,8 +16,16 @@ public class App extends Application {
         if(ipLOG.size() == 0) {
             ipLOG.add(ip);
         }
-        this.ip = IP;
-        this.ipLOG.add(this.ip);
+
+        // check if the ip is same as the current ip
+        if (IP.equals(ipLOG.get(ipLOG.size() - 1))) {
+            Toast.makeText(getApplicationContext(), "The New IP is same as the Current Value", Toast.LENGTH_LONG).show();
+        }
+        else {
+            this.ip = IP;
+            this.ipLOG.add(this.ip);
+            Toast.makeText(getApplicationContext(), "IP changed succesfully to "+ IP, Toast.LENGTH_SHORT).show();
+        }
     }
     public ArrayList<String> getIpLog() {
         if(ipLOG.size() == 0) {

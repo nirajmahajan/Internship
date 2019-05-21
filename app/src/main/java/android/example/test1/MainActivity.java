@@ -2,13 +2,14 @@ package android.example.test1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.example.test1.Utilities.App;
+import android.example.test1.Utilities.SignInActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,6 +45,18 @@ public class MainActivity extends AppCompatActivity {
         app = (App) getApplication();
         Et_usern = (EditText) findViewById(R.id.et_username);
         Et_passwd = (EditText) findViewById(R.id.et_passwd);
+
+        Et_passwd.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    login(v);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void login(View view){
@@ -201,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String newIP = et_getIP.getText().toString();
                         app.setIp(newIP);
-                        Toast.makeText(getApplicationContext(), "IP changed succesfully to "+newIP, Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
                 })

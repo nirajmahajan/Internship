@@ -1,7 +1,8 @@
-package android.example.test1;
+package android.example.test1.Utilities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.example.test1.Welcome;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
