@@ -26,28 +26,28 @@ public class Person {
     @ColumnInfo(name = "age")
     private int age = -1;
 
-    @ColumnInfo(name = "image")
-    Image image = null;
+//    @ColumnInfo(name = "image")
+//    Image image = null;
 
-    public void makePerson(String firstName, String lastName, String fatherName, String motherName, Contact contact, int gender, int age, Image image, Image signature){
+    public void makePerson(String firstName, String lastName, int gender, int age){
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.age = age;
-        this.image = image;
-        }
+//        this.image = image;
+    }
 
     public int getId() {return this.id;}
     public void setId (int id) {this.id = id;}
-    public String get_firstName() {return this.firstName;}
-    public void set_firstName(String firstName) {this.firstName = firstName;}
-    public String get_lastName() {return this.lastName;}
-    public void set_lastName(String lastName) {this.lastName = lastName;}
-    public int get_gender(){return this.gender;}
-    public void set_gender(int gender){this.gender = gender;}
-    public int get_age(){return this.age;}
-    public void set_age(int age){this.age = age;}
-    public Image image(){return this.image;}
-    public void set_image(Image image){this.image = image;}
+    public String getFirstName() {return this.firstName;}
+    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public String getLastName() {return this.lastName;}
+    public void setLastName(String lastName) {this.lastName = lastName;}
+    public int getGender(){return this.gender;}
+    public void setGender(int gender){this.gender = gender;}
+    public int getAge(){return this.age;}
+    public void setAge(int age){this.age = age;}
+//    public Image image(){return this.image;}
+//    public void set_image(Image image){this.image = image;}
 
 }

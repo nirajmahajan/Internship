@@ -11,4 +11,5 @@
     <string name="delete_account">Delete Account</string>
     <string name="ip_override_username">IP_OVERRIDE</string>
     <string name="ip_override_password">IP_OVERRIDE</string>
+    <string name="new_survey">New Survey</string>
 </resources>

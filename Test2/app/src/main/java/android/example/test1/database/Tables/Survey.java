@@ -12,18 +12,18 @@ public class Survey {
     @ColumnInfo(name = "childId")
     private int childId;
 
-    @ColumnInfo(name = "socialWorkerId")
-    private int socialWorkerId;
+    @ColumnInfo(name = "socialWorkerUsername")
+    private String socialWorkerUsername;
 
-    @ColumnInfo(name = "surveyData")
-    private SurveyData surveyData;
+//    @ColumnInfo(name = "surveyData")
+//    private SurveyData surveyData;
 
     public int getId() {return this.id;}
     public void setId(int id) {this.id = id;}
     public int getChildId() {return this.childId;}
     public void setChildId(int childId) {this.childId = childId;}
-    public int getSocialWorkerId() {return this.socialWorkerId;}
-    public void setSocialWorkerId(int socialWorkerId) {this.socialWorkerId = socialWorkerId;}
-    public SurveyData getSurveyData() {return this.surveyData;}
-    public void setSurveyData(SurveyData surveyData) {this.surveyData = surveyData;}
+    public String getSocialWorkerUsername() {return this.socialWorkerUsername;}
+    public void setSocialWorkerUsername(String socialWorkerUsername) {this.socialWorkerUsername = socialWorkerUsername;}
+//    public SurveyData getSurveyData() {return this.surveyData;}
+//    public void setSurveyData(SurveyData surveyData) {this.surveyData = surveyData;}
 }

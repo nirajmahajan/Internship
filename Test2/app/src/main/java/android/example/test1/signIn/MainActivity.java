@@ -1,9 +1,10 @@
-package android.example.test1;
+package android.example.test1.signIn;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.example.test1.R;
 import android.example.test1.Utilities.App;
 import android.example.test1.Utilities.SignInActivity;
 import android.os.AsyncTask;

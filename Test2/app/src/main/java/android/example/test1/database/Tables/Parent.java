@@ -17,11 +17,14 @@ public class Parent {
     @ColumnInfo(name = "childId")
     private int childId;
 
+    @ColumnInfo(name = "contactId")
+    private int contactId;
+
     @ColumnInfo(name = "employment")
     private String employment;
 
-    @ColumnInfo(name = "signature")
-    private Image signature;
+//    @ColumnInfo(name = "signature")
+//    private Image signature;
 
     public int getId() {return this.id;}
     public void setId(int id) {this.id = id;}
@@ -29,10 +32,12 @@ public class Parent {
     public void setPersonId(int personId) {this.personId = personId;}
     public int getChildId() {return this.childId;}
     public void setChildId(int childId) {this.childId = childId;}
+    public int getContactId() {return contactId;}
+    public void setContactId(int contactId) {this.contactId = contactId;}
     public String getEmployment() {return this.employment;}
     public void setEmployment(String employment) {this.employment = employment;}
-    public Image getSignature() {return this.signature;}
-    public void setSignature(Image signature) {this.signature = signature;}
+//    public Image getSignature() {return this.signature;}
+//    public void setSignature(Image signature) {this.signature = signature;}
 
 
 }

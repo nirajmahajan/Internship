@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.example.test1.Ip_Log">
+    tools:context="android.example.test1.signIn.Ip_Log">
 
     <TextView
         android:id="@+id/tv_ip_log_title"

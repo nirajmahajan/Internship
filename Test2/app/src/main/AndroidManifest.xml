@@ -17,9 +17,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Ip_Log"></activity>
+        <activity android:name=".takeSurvey.InputDetails"></activity>
+        <activity android:name=".signIn.Ip_Log" />
         <activity android:name=".Welcome" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".signIn.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -6,7 +6,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class App extends Application {
-    private String ip = "35.200.212.119";
+    private String ip = "35.244.49.161";
     private ArrayList<String> ipLOG = new ArrayList<String>();
 
     public String getIP() {
