@@ -1,5 +1,6 @@
 package android.example.test1.signIn;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -7,15 +8,23 @@ import android.content.Intent;
 import android.example.test1.R;
 import android.example.test1.Utilities.App;
 import android.example.test1.Utilities.SignInActivity;
+import android.example.test1.database.AppDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         app = (App) getApplication();
         Et_usern = (EditText) findViewById(R.id.et_username);
         Et_passwd = (EditText) findViewById(R.id.et_passwd);
@@ -58,6 +69,26 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.backup_restore, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.menu_backup){
+            exportDB();
+        } else if (R.id.menu_restore == id) {
+            importDB();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void login(View view){
@@ -224,5 +255,69 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
     }
+
+
+    //importing database
+    private void importDB() {
+        // TODO Auto-generated method stub
+
+        try {
+//                if (sd.canWrite()) {
+            String  currentDBPath= getApplicationContext().getDatabasePath("local-database").getPath();;
+            String backupDBPath  = Environment.getExternalStorageDirectory().toString() + "/Test1";
+            File  backupDB= new File(currentDBPath);
+            File currentDB  = new File(backupDBPath);
+            if (backupDB.exists()) {
+                AppDatabase.getAppDatabase(getApplicationContext()).close();
+                backupDB.delete();
+            }
+
+            FileChannel src = new FileInputStream(currentDB).getChannel();
+            FileChannel dst = new FileOutputStream(backupDB).getChannel();
+            dst.transferFrom(src, 0, src.size());
+            src.close();
+            dst.close();
+            Toast.makeText(getBaseContext(), "Import Successful", Toast.LENGTH_LONG).show();
+
+//                }
+        } catch (Exception e) {
+
+            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        }
+    }
+    //exporting database
+    private void exportDB() {
+        // TODO Auto-generated method stub
+
+        try {
+            AppDatabase.getAppDatabase(getApplicationContext()).close();
+//                if (sd.canWrite()) {
+            String  currentDBPath= getApplicationContext().getDatabasePath("local-database").getPath();
+            String backupDBPath  = Environment.getExternalStorageDirectory().toString() + "/Test1";
+            File currentDB = new File(currentDBPath);
+            if (currentDB.exists()) {
+                Toast.makeText(getApplicationContext(), "Exists" + currentDB.getTotalSpace(), 10).show();
+            }
+            File backupDB = new File(backupDBPath);
+
+            FileChannel src = new FileInputStream(currentDB).getChannel();
+            FileChannel dst = new FileOutputStream(backupDB).getChannel();
+            dst.transferFrom(src, 0, src.size());
+            src.close();
+            dst.close();
+            Toast.makeText(getBaseContext(), "Export Successful", Toast.LENGTH_LONG).show();
+
+//                }
+        } catch (Exception e) {
+
+            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        }
+    }
+
+
 }
 

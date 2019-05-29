@@ -7,16 +7,21 @@ import android.content.Intent;
 import android.example.test1.Utilities.App;
 import android.example.test1.Utilities.SignInActivity;
 import android.example.test1.database.AppDatabase;
+import android.example.test1.database.Tables.Child;
+import android.example.test1.database.Tables.Person;
 import android.example.test1.database.Tables.SocialWorker;
+import android.example.test1.database.Tables.Survey;
 import android.example.test1.signIn.MainActivity;
 import android.example.test1.takeSurvey.InputDetails;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Welcome extends AppCompatActivity {
@@ -25,6 +30,10 @@ public class Welcome extends AppCompatActivity {
     App app;
     SocialWorker socialWorker;
 
+    private ListView listView;
+    private ArrayList<Integer> names;
+    WelcomeAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +41,17 @@ public class Welcome extends AppCompatActivity {
         Intent in = getIntent();
         name = in.getStringExtra("NAME");
         username = in.getStringExtra("USERNAME");
+
+        listView = findViewById(R.id.lv_welcome);
+        names = createNames();
+
+//        Survey survey = AppDatabase.getAppDatabase(getApplicationContext()).surveyDao().findSurveyById(names.get(0));
+//        Child child = AppDatabase.getAppDatabase(getApplicationContext()).childDao().findChildById(survey.getChildId());
+//        Person pchild = AppDatabase.getAppDatabase(getApplicationContext()).personDao().findPersonById(child.getPersonId());
+//        Toast.makeText(getApplicationContext(), String.valueOf(pchild.getFirstName()), 10).show();
+        adapter = new WelcomeAdapter(this, names);
+        listView.setAdapter(adapter);
+
 
         Welcome();
         app = (App) getApplication();
@@ -106,10 +126,18 @@ public class Welcome extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
         private void Welcome() {
         TextView tv = findViewById(R.id.tv_welcome);
         tv.setText(getResources().getString(R.string.welcome, name));
+    }
+
+    private ArrayList<Integer> createNames() {
+        List<Survey> surveys= AppDatabase.getAppDatabase(getApplicationContext()).surveyDao().getAllSurveys();
+        ArrayList<Integer> ansList = new ArrayList<>();
+
+        for (Survey survey : surveys) {
+            ansList.add(survey.getId());
+        }
+        return ansList;
     }
 }

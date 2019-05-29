@@ -74,9 +74,13 @@ public class InputDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.menu_done) {
+        if (id == R.id.menu_cancel) {
+            finish();
+        }
+        else if (id == R.id.menu_done) {
 
             childFirstName = ((EditText)findViewById(R.id.et_input_child_first_name)).getText().toString();
+            Toast.makeText(getApplicationContext(), childFirstName,10).show();
             childLastName = ((EditText)findViewById(R.id.et_input_child_last_name)).getText().toString();
             parentFirstName = ((EditText)findViewById(R.id.et_input_parent_first_name)).getText().toString();
             parentLastName = ((EditText)findViewById(R.id.et_input_parent_last_name)).getText().toString();
@@ -89,29 +93,46 @@ public class InputDetails extends AppCompatActivity {
                 parentGender = 2;
             }
             int cGender = ((RadioGroup)findViewById(R.id.rg_input_child_gender)).getCheckedRadioButtonId();
-            if(cGender == R.id.radio_parent_female) {
+            if(cGender == R.id.radio_child_female) {
                 childGender = 0;
-            } else if (cGender == R.id.radio_parent_male){
+            } else if (cGender == R.id.radio_child_male){
                 childGender = 1;
-            } else if (cGender == R.id.radio_parent_other) {
+            } else if (cGender == R.id.radio_child_other) {
                 childGender = 2;
             }
 
-            childAge = Integer.parseInt(((EditText) findViewById(R.id.et_input_child_age)).getText().toString());
-            parentAge = Integer.parseInt(((EditText) findViewById(R.id.et_input_parent_age)).getText().toString());
+            String strchildAge = ((EditText) findViewById(R.id.et_input_child_age)).getText().toString();
+            if (!strchildAge.equals("")) {
+                childAge = Integer.parseInt(strchildAge);
+            }
+            String strparentAge = ((EditText) findViewById(R.id.et_input_parent_age)).getText().toString();
+            if (!strparentAge.equals("")) {
+                parentAge = Integer.parseInt(strparentAge);
+            }
 
-            phoneNumber = Long.parseLong(((EditText) findViewById(R.id.et_input_phone)).getText().toString());
-            alternatePhoneNumber = Long.parseLong(((EditText) findViewById(R.id.et_input_alternate_phone)).getText().toString());
+            String strphone = ((EditText) findViewById(R.id.et_input_phone)).getText().toString();
+            if (!strphone.equals("")) {
+                phoneNumber = Long.parseLong(strphone);
+            }
+
+            String straltphone = ((EditText) findViewById(R.id.et_input_alternate_phone)).getText().toString();
+            if (!straltphone.equals("")) {
+                alternatePhoneNumber = Long.parseLong(straltphone);
+            }
+
+            String strpincode = ((EditText) findViewById(R.id.et_input_address_pincode)).getText().toString();
+            if (!strpincode.equals("")) {
+                pincode = Integer.parseInt(strpincode);
+            }
 
             mailId = ((EditText)findViewById(R.id.et_input_mail)).getText().toString();
             addressLine = ((EditText)findViewById(R.id.et_input_address_first)).getText().toString() + ((EditText)findViewById(R.id.et_input_address_second)).getText().toString();;
             district = ((EditText)findViewById(R.id.et_input_address_district)).getText().toString();
             city = ((EditText)findViewById(R.id.et_input_address_city)).getText().toString();
             state = ((EditText)findViewById(R.id.et_input_address_state)).getText().toString();
-            pincode = Integer.parseInt(((EditText)findViewById(R.id.et_input_address_pincode)).getText().toString());
 
             if(!allFilled()) {
-                Toast.makeText(getApplicationContext(), "Cannot Proceed Untill All Information has been filled", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Cannot Proceed Until All Information has been filled", Toast.LENGTH_LONG).show();
             }
             else {
                 Person pChild = new Person();
@@ -121,29 +142,44 @@ public class InputDetails extends AppCompatActivity {
                 Survey survey = new Survey();
                 Contact contact = new Contact();
 
+                AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
+                long[] personIds = db.personDao().Insert(pParent, pChild);
+                long[] surveyIds = db.surveyDao().Insert(survey);
+                long[] contactIds = db.contactDao().Insert(contact);
+                long[] childIds = db.childDao().Insert(child);
+                long[] parentIds = db.parentDao().Insert(parent);
+//                db.socialWorkerDao().Update(socialWorker);
+
+
+                pChild.setId((int) personIds[1]);
                 pChild.setFirstName(childFirstName);
                 pChild.setLastName(childLastName);
                 pChild.setAge(childAge);
                 pChild.setGender(childGender);
 
+                pParent.setId((int) personIds[0]);
                 pParent.setFirstName(parentFirstName);
                 pParent.setLastName(parentLastName);
                 pParent.setAge(parentAge);
                 pParent.setGender(parentGender);
 
-                child.setPersonId(pChild.getId());
-                child.setParentId(parent.getId());
-                child.setSurveyId(survey.getId());
+                child.setId((int) childIds[0]);
+                child.setPersonId((int) personIds[1]);
+                child.setParentId((int) parentIds[0]);
+                child.setSurveyId((int) surveyIds[0]);
 
-                parent.setChildId(child.getId());
-                parent.setPersonId(pParent.getId());
+                parent.setId((int) parentIds[0]);
+                parent.setChildId((int) childIds[0]);
+                parent.setPersonId((int) personIds[0]);
                 parent.setEmployment(parentOccupation);
-                parent.setContactId(contact.getId());
+                parent.setContactId((int) contactIds[0]);
 
-                survey.setChildId(child.getId());
+                survey.setId((int) surveyIds[0]);
+                survey.setChildId((int) childIds[0]);
                 survey.setSocialWorkerUsername(socialWorker.getUsername());
 //                survey.setSurveyData(null);
 
+                contact.setId((int) contactIds[0]);
                 contact.setAddress_line(addressLine);
                 contact.setPhoneNumber(phoneNumber);
                 contact.setAlternatePhoneNumber(alternatePhoneNumber);
@@ -153,24 +189,27 @@ public class InputDetails extends AppCompatActivity {
                 contact.setMailId(mailId);
                 contact.setPincode(pincode);
 
+                db.personDao().Update(pParent);
+                db.personDao().Update(pChild);
+                db.surveyDao().Update(survey);
+                db.contactDao().Update(contact);
+                db.childDao().Update(child);
+                db.parentDao().Update(parent);
+//                db.socialWorkerDao().Update(socialWorker);
+
+
 //                Integer[] initialSurveys = socialWorker.getSurveyIds();
 //                ArrayList<Integer> temp = new ArrayList<>(Arrays.asList(initialSurveys));
 //
 //                temp.add(survey.getId());
 //                socialWorker.setSurveyIds(temp.toArray(new Integer[temp.size()]));
-
-
-//                AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
-//                db.personDao().Insert(pParent, pChild);
-//                db.surveyDao().Insert(survey);
-//                db.contactDao().Insert(contact);
-//                db.childDao().Insert(child);
-//                db.parentDao().Insert(parent);
-//                db.socialWorkerDao().Update(socialWorker);
+//
+//
 
                 Toast.makeText(getApplicationContext(), "Data Added to database", Toast.LENGTH_SHORT).show();
 //                Intent intent = new Intent(getApplicationContext(), TakeSurvey.class);
 //                startActivity(intent);
+                finish();
             }
         }
         return super.onOptionsItemSelected(item);

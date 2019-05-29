@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_welcome_object_id"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="ID"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_welcome_object_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:text="Name : abcd test"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_welcome_object_id"/>
+    <TextView
+        android:id="@+id/tv_welcome_object_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:text="Gender : Male"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/tv_welcome_object_name"
+        app:layout_constraintStart_toStartOf="@id/tv_welcome_object_name"/>
+    <TextView
+        android:id="@+id/tv_welcome_object_age"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:gravity="center"
+        android:text="Age : 8"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/tv_welcome_object_name"
+        app:layout_constraintStart_toEndOf="@id/tv_welcome_object_gender"/>
+
+    <ImageButton
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/delete"
+        android:layout_marginRight="20dp"
+        android:tint="@android:color/holo_red_dark"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="VectorDrawableCompat" />
+
+</android.support.constraint.ConstraintLayout>

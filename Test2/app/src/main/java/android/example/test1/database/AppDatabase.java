@@ -18,6 +18,7 @@ import android.example.test1.database.Tables.Person;
 import android.example.test1.database.Tables.SocialWorker;
 import android.example.test1.database.Tables.Survey;
 import android.example.test1.database.Tables.SurveyData;
+import android.icu.lang.UScript;
 
 @Database(entities = {Contact.class, Person.class, Parent.class, Child.class, SocialWorker.class, Survey.class, SurveyData.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
@@ -56,5 +57,20 @@ public abstract class AppDatabase extends RoomDatabase {
         INSTANCE.surveyDataDao().purge();
         INSTANCE.personDao().purge();
         INSTANCE.parentDao().purge();
+    }
+
+    public static void purgeSurveyById(int surveyId){
+        Survey survey = INSTANCE.surveyDao().findSurveyById(surveyId);
+        Child child = INSTANCE.childDao().findChildById(survey.getChildId());
+        Parent parent = INSTANCE.parentDao().findParentById(child.getParentId());
+        Person pparent = INSTANCE.personDao().findPersonById(parent.getPersonId());
+        Person pchild = INSTANCE.personDao().findPersonById(child.getPersonId());
+        Contact contact = INSTANCE.contactDao().findContactById(parent.getContactId());
+
+        INSTANCE.personDao().Delete(pparent, pchild);
+        INSTANCE.childDao().Delete(child);
+        INSTANCE.parentDao().Delete(parent);
+        INSTANCE.surveyDao().Delete(survey);
+        INSTANCE.contactDao().Delete(contact);
     }
 }

@@ -4,7 +4,9 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 import android.example.test1.database.Tables.Survey;
+import android.example.test1.database.Tables.SurveyData;
 
 import java.util.List;
 
@@ -20,8 +22,11 @@ public interface SurveyDao {
     @Query("Select * from Surveys where id LIKE :id LIMIT 1")
     Survey findSurveyById(int id);
 
+    @Update
+    void Update(Survey... surveys);
+
     @Insert
-    void Insert(Survey... surveys);
+    long[] Insert(Survey... surveys);
 
     @Delete
     void Delete(Survey... surveys);
