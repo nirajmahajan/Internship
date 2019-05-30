@@ -19,6 +19,10 @@ public class Child {
     @ColumnInfo(name = "parentId")
     private int parentId;
 
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    private byte[] image;
+
+
     public int getId() {return this.id;}
     public void setId(int id) {this.id = id;}
     public int getPersonId() {return this.personId;}
@@ -27,5 +31,7 @@ public class Child {
     public void setSurveyId(int surveyId) {this.surveyId = surveyId;}
     public int getParentId() {return this.parentId;}
     public void setParentId(int parentId) {this.parentId = parentId;}
+    public byte[] getImage() {return this.image;}
+    public void setImage (byte[] image) {this.image = image;}
 
 }

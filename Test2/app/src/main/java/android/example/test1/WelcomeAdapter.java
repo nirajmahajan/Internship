@@ -5,11 +5,14 @@ import android.example.test1.database.AppDatabase;
 import android.example.test1.database.Tables.Child;
 import android.example.test1.database.Tables.Person;
 import android.example.test1.database.Tables.Survey;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ public class WelcomeAdapter extends ArrayAdapter {
         TextView tv_name = rowView.findViewById(R.id.tv_welcome_object_name);
         TextView tv_age = rowView.findViewById(R.id.tv_welcome_object_age);
         TextView tv_gender = rowView.findViewById(R.id.tv_welcome_object_gender);
+        ImageView imageView = rowView.findViewById(R.id.iv_welcome_pic);
         ImageButton imageButton = rowView.findViewById(R.id.imageView);
 
         int SurveyId = names.get(position);
@@ -54,6 +58,8 @@ public class WelcomeAdapter extends ArrayAdapter {
 
         tv_gender.setText("Gender : " + sex);
         tv_id.setText(String.valueOf(position + 1));
+//        Toast.makeText(context, String.valueOf(null == child.getImage()), 10).show();
+        setPic(imageView, child.getImage());
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,5 +69,29 @@ public class WelcomeAdapter extends ArrayAdapter {
             }
         });
         return rowView;
+    }
+
+    private void setPic(ImageView imageView, byte[] BLOB) {
+        // Get the dimensions of the View
+//        int targetW = imageView.getWidth();
+//        int targetH = imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(BLOB, 0, BLOB.length, bmOptions);
+//        int photoW = bmOptions.outWidth;
+//        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(BLOB, 0, BLOB.length, bmOptions);
+        imageView.setImageBitmap(bitmap);
     }
 }

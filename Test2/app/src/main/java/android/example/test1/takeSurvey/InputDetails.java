@@ -1,11 +1,7 @@
 package android.example.test1.takeSurvey;
 
-import android.app.Activity;
-import android.arch.persistence.room.ColumnInfo;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.example.test1.R;
-import android.example.test1.Utilities.SignInActivity;
 import android.example.test1.database.AppDatabase;
 import android.example.test1.database.Tables.Child;
 import android.example.test1.database.Tables.Contact;
@@ -13,19 +9,21 @@ import android.example.test1.database.Tables.Parent;
 import android.example.test1.database.Tables.Person;
 import android.example.test1.database.Tables.SocialWorker;
 import android.example.test1.database.Tables.Survey;
-import android.example.test1.signIn.MainActivity;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
 
 public class InputDetails extends AppCompatActivity {
 
@@ -47,6 +45,7 @@ public class InputDetails extends AppCompatActivity {
     private String district = "";
     private String state = "";
     private String city = "";
+    private byte[] BLOB = null;
     private int pincode = -1;
 
     private SocialWorker socialWorker;
@@ -59,7 +58,6 @@ public class InputDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         String username = intent.getStringExtra("SOCIAL_WORKER_USERNAME");
-        Toast.makeText(getApplicationContext(), username, 1).show();
         socialWorker = AppDatabase.getAppDatabase(getApplicationContext()).socialWorkerDao().findSocialWorkerByUsername(username).get(0);
     }
 
@@ -80,7 +78,6 @@ public class InputDetails extends AppCompatActivity {
         else if (id == R.id.menu_done) {
 
             childFirstName = ((EditText)findViewById(R.id.et_input_child_first_name)).getText().toString();
-            Toast.makeText(getApplicationContext(), childFirstName,10).show();
             childLastName = ((EditText)findViewById(R.id.et_input_child_last_name)).getText().toString();
             parentFirstName = ((EditText)findViewById(R.id.et_input_parent_first_name)).getText().toString();
             parentLastName = ((EditText)findViewById(R.id.et_input_parent_last_name)).getText().toString();
@@ -132,7 +129,7 @@ public class InputDetails extends AppCompatActivity {
             state = ((EditText)findViewById(R.id.et_input_address_state)).getText().toString();
 
             if(!allFilled()) {
-//                Toast.makeText(getApplicationContext(), "Cannot Proceed Until All Information has been filled", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Cannot Proceed Until All Information has been filled", Toast.LENGTH_LONG).show();
             }
             else {
                 Person pChild = new Person();
@@ -167,6 +164,7 @@ public class InputDetails extends AppCompatActivity {
                 child.setPersonId((int) personIds[1]);
                 child.setParentId((int) parentIds[0]);
                 child.setSurveyId((int) surveyIds[0]);
+                child.setImage(BLOB);
 
                 parent.setId((int) parentIds[0]);
                 parent.setChildId((int) childIds[0]);
@@ -229,6 +227,59 @@ public class InputDetails extends AppCompatActivity {
                 district.equals("") ||
                 state.equals("") ||
                 city.equals("") ||
+                (BLOB == null) ||
                 (pincode == -1));
+    }
+
+    public void takeImage(View v) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        final int REQUEST_TAKE_PHOTO = 1;
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+            BLOB = stream.toByteArray();
+
+            Toast.makeText(getApplicationContext(), String.valueOf(BLOB.toString()), 10).show();
+
+            final ImageButton imageButton = findViewById(R.id.im_button_take_new);
+            setPic(imageButton, BLOB);
+        }
+    }
+
+    private void setPic(ImageButton imageView, byte[] BLOB) {
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(BLOB, 0, BLOB.length, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(BLOB, 0, BLOB.length, bmOptions);
+        imageView.setImageBitmap(bitmap);
     }
 }
