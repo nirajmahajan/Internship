@@ -1,5 +1,6 @@
 package com.example.recoveryapp;
 
+import android.app.ProgressDialog;
 import android.widget.Toast;
 
 import java.io.File;
@@ -17,11 +18,9 @@ public class Util {
 
         if (sourceLocation.isDirectory()) {
             if (!targetLocation.exists()) {
-                deleteDirectory(targetLocation);
                 targetLocation.mkdirs();
             }
             else {
-
                 deleteDirectory(targetLocation);
                 targetLocation.mkdirs();
             }
@@ -33,7 +32,6 @@ public class Util {
                         targetLocation, children[i]));
             }
         } else {
-
             copyFile(sourceLocation, targetLocation);
         }
     }

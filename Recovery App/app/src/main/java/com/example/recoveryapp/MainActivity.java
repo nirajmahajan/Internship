@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         try {
 
 //                if (sd.canWrite()) {
-            String  currentDBPath= "/data/user/0/com.example.myfirstapp/databases/";
+            String  currentDBPath= "/data/user/0/com.example.myfirstapp/";
             String backupDBPath  = "/data/user/0/com.example.recoveryapp/databases/";
 //            String currentDBPath = Environment.getExternalStorageDirectory().toString() + "/Dbbbbb/";
 //            String backupDBPath = Environment.getExternalStorageDirectory().toString() + "/Dbbackup/";
@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
         try {
 // a           AppDatabase.getAppDatabase(getApplicationContext()).close();
 // a               if (sd.canWrite()) {
-            String  currentDBPath= "/data/user/0/com.example.myfirstapp/databases/";
+            String  currentDBPath= "/data/user/0/com.example.myfirstapp/";
             String backupDBPath  = "/data/user/0/com.example.recoveryapp/databases/";
-//            String backupDBPath = Environment.getExternalStorageDirectory().toString() + "/Dbbackup";
+//            String backupDBPath = Environment.getExternalStorageDirectory().toString() + "/DbbackupOLD";
             File currentDB = new File(currentDBPath);
             File backupDB = new File(backupDBPath);
             Toast.makeText(getBaseContext(), "Export Successful", Toast.LENGTH_LONG).show();

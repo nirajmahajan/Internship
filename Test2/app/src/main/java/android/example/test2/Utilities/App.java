@@ -13,7 +13,7 @@ public class App extends Application {
         return ip;
     }
     public void setIp(String IP) {
-        if(ipLOG.size() == 0) {r
+        if(ipLOG.size() == 0) {
             ipLOG.add(ip);
         }
 
