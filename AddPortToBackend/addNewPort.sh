@@ -77,8 +77,14 @@ DBPassword="${Name}12345678"
 DirectoryName="$Name"
 ErrorLogFile="error${Name}.log"
 AccessLogFile="access${Name}.log"
+
+# if not gcloud instance, this will give empty string
 ExternalIP=${curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip}
 
+# check if string empty
+if [ "$ExternalIP" == "" ]; then
+	ExternalIP=$( ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+fi
 
 # Take input for port
 cd /etc/apache2/
