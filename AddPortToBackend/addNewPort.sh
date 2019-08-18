@@ -79,10 +79,12 @@ ErrorLogFile="error${Name}.log"
 AccessLogFile="access${Name}.log"
 
 # if not gcloud instance, this will give empty string
-ExternalIP=${curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip}
+ExternalIP=$(curl -sH "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip)
 
 # check if string empty
-if [ "$ExternalIP" == "" ]; then
+if [ "$ExternalIP" = "" ]; then
+	echo "You are not using a google cloud backend."
+	echo "Using the external ip of this machine to configure the backend"
 	ExternalIP=$( ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
 fi
 
@@ -115,12 +117,9 @@ mv temp ports.conf
 cd sites-enabled/
 
 printf "
-
 <VirtualHost *:$Port>
-
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/$DirectoryName
-
             <Directory />
                 Options FollowSymLinks
                 AllowOverride None
@@ -131,10 +130,8 @@ printf "
                 Order allow,deny
             allow from all
             </Directory>
-
         ErrorLog \${APACHE_LOG_DIR}/$ErrorLogFile
         CustomLog \${APACHE_LOG_DIR}/$AccessLogFile combined
-
 </VirtualHost>\n\n" >> 000-default.conf
 
 
@@ -158,9 +155,7 @@ cd /var/www/"$DirectoryName"/config
 /bin/touch db.php
 
 printf "
-
 <?php
-
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=$DBName',
@@ -176,18 +171,14 @@ cd /var/www/"$DirectoryName"/start_cms/app/config
 /bin/rm db.php
 /bin/touch db.php
 printf "
-
 <?php
-
 defined('_VALID_PHP') or die('No direct script access.');
-
 define('DB_HOST', 'localhost');
 define('DB_USER', '$DBUsername');
 define('DB_PASSWORD', '$DBPassword');
 define('DB_NAME', '$DBName');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_AES_KEY', 't4-h8_hv5^f');
-
 ?>\n\n
 " >> db.php
 
@@ -196,9 +187,7 @@ define('DB_AES_KEY', 't4-h8_hv5^f');
 /bin/touch dirs.php
 printf "
 <?php
-
 defined('_VALID_PHP') or die('No direct script access.');
-
 define('SITE', '//$ExternalIP:$Port/');
 define('CMS_DIR', 'start_cms/');
 define('UPLOADS_DIR', '../uploads/');
@@ -217,10 +206,8 @@ define('WEB_DIR', 'web/');
 define('CSS_DIR', WEB_DIR.'css/');
 define('JS_DIR', WEB_DIR.'js/');
 define('IMAGE_DIR', WEB_DIR.'images/');
-
 define('CONSENT_FO/bin/RM_FILE_ENGLISH', '../consent_fo/bin/rm_english.txt');
 define('CONSENT_FO/bin/RM_FILE_HINDI', '../consent_fo/bin/rm_hindi.txt');
-
 ?>
 " >> dirs.php
 
