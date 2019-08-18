@@ -77,6 +77,7 @@ DBPassword="${Name}12345678"
 DirectoryName="$Name"
 ErrorLogFile="error${Name}.log"
 AccessLogFile="access${Name}.log"
+ExternalIP=${curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip}
 
 
 # Take input for port
@@ -192,7 +193,7 @@ printf "
 
 defined('_VALID_PHP') or die('No direct script access.');
 
-define('SITE', '//35.200.251.93:$Port/');
+define('SITE', '//$ExternalIP:$Port/');
 define('CMS_DIR', 'start_cms/');
 define('UPLOADS_DIR', '../uploads/');
 define('APP_DIR', 'app/');
